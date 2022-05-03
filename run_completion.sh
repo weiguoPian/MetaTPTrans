@@ -1,4 +1,5 @@
 python -u __main_completion__.py \
+        --model_type alpha \
         --layers 5 \
         --e_ff_fold 2 \
         --attn_heads 8 \
@@ -17,5 +18,5 @@ python -u __main_completion__.py \
         --dropout 0.2 \
         --epochs 40 \
         --MultiStepLR True \
-        --milestones 25 35 \
+        --milestones 30 35 \
         --lr_scheduler True
