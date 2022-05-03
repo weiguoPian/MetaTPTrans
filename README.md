@@ -14,7 +14,7 @@ Download and unzip the raw jsonl data of CSN into the _raw_data_ dir like that
 │   ├── go        
 │   ├── javascript        
 ```
-For the subset used for code completion task, please download it [here](https://drive.google.com/file/d/1HmZviSzje-STZaBH8kvt_bLEFPorEcFr/view?usp=sharing). Or you can directly download the parsed data (see [here](./data/README.MD))
+For the subset used for code completion task, please download it [here](https://drive.google.com/file/d/1HmZviSzje-STZaBH8kvt_bLEFPorEcFr/view?usp=sharing). Or you can directly download the parsed data (see [here](./data/README.MD)).
 
 ## Preprocess
 Please run script *multi_language_parse.py* for preprocessing data for code summarization task.
