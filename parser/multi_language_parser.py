@@ -180,19 +180,6 @@ def sub_process(args, idx, all_data, lang_parser):
 
 
 def compress(args, data):
-    # if args.language == 'multi':
-    #     target, content, named, paths, paths_map, r_path_idx, r_paths, row, lt = \
-    #         data['target'], data['content'], data['named'], data['paths'], data['paths_map'], data[
-    #             'r_path_idx'], data['r_paths'], data['row'], data['language']
-
-    #     s = "|".join([word for word in target]) + '\t' + "|".join([word for word in content]) + '\t' \
-    #         + "|".join([str(num) for num in named]) + '\t' + \
-    #         "|".join([" ".join([str(num) for num in path]) for path in paths]) + '\t' + \
-    #         "|".join([" ".join([str(num) for num in value]) for key, value in paths_map.items()]) + '\t' + "|".join(
-    #         [str(num) for num in row]) + '\t' + "|".join([str(num) for num in r_path_idx]) + '\t' + \
-    #         "|".join([" ".join([str(num) for num in r_path]) for r_path in r_paths]) + '\t' + lt
-
-    # else:
     target, content, named, paths, paths_map, r_path_idx, r_paths, row = \
         data['target'], data['content'], data['named'], data['paths'], data['paths_map'], data[
             'r_path_idx'], data['r_paths'], data['row']

@@ -206,19 +206,6 @@ def sub_process(args, idx, all_data, lang_parser):
 
 
 def compress(args, data):
-    # if args.language == 'multi':
-    #     target, content, named, paths, paths_map, r_path_idx, r_paths, row, lt = \
-    #         data['target'], data['content'], data['named'], data['paths'], data['paths_map'], data[
-    #             'r_path_idx'], data['r_paths'], data['row'], data['language']
-
-    #     s = "|".join([word for word in target]) + '\t' + "|".join([word for word in content]) + '\t' \
-    #         + "|".join([str(num) for num in named]) + '\t' + \
-    #         "|".join([" ".join([str(num) for num in path]) for path in paths]) + '\t' + \
-    #         "|".join([" ".join([str(num) for num in value]) for key, value in paths_map.items()]) + '\t' + "|".join(
-    #         [str(num) for num in row]) + '\t' + "|".join([str(num) for num in r_path_idx]) + '\t' + \
-    #         "|".join([" ".join([str(num) for num in r_path]) for r_path in r_paths]) + '\t' + lt
-
-    # else:
     label, content, named, paths, paths_map, r_path_idx, r_paths, row = \
         data['label'], data['content'], data['named'], data['paths'], data['paths_map'], data[
             'r_path_idx'], data['r_paths'], data['row']
@@ -323,13 +310,25 @@ def process(args):
 
 
 def refine_source_vocab_gen_label_dict(language):
-    source_vocab_path = './data/code_completion/{}/source_vocab.json'.format(language)
-    label_vocab_path = './raw_data/code_completion/{}/label_vocab.json'.format(language)
+    if language != 'multi':
+        label_vocab_path = '{}/raw_data/code_completion/{}/label_vocab.json'.format(root, language)
+        label_vocab = open(label_vocab_path, 'r')
+        label_vocab_dict = json.load(label_vocab)
+        label_vocab.close()
+    else:
+        label_vocab_dict = {}
+        for l in ['python', 'javascript', 'ruby', 'go']:
+            sub_label_vocab_path = '{}/raw_data/code_completion/{}/label_vocab.json'.format(root, l)
+            sub_label_vocab = open(sub_label_vocab_path, 'r')
+            sub_label_vocab_dict = json.load(sub_label_vocab)
+            sub_label_vocab.close()
+            for key in sub_label_vocab_dict:
+                if key not in sub_label_vocab_dict:
+                    label_vocab_dict[key] = sub_label_vocab_dict[key]
+                else:
+                    label_vocab_dict[key] += sub_label_vocab_dict[key]
 
-    label_vocab = open(label_vocab_path, 'r')
-    label_vocab_dict = json.load(label_vocab)
-    label_vocab.close()
-
+    source_vocab_path = '{}/data/code_completion/{}/source_vocab.json'.format(root, language)
     source_vocab = open(source_vocab_path, 'r')
     source_vocab_dict = json.load(source_vocab)
     source_vocab.close()
@@ -348,10 +347,16 @@ def refine_source_vocab_gen_label_dict(language):
     source_vocab.write(json.dumps(source_vocab_dict))
     source_vocab.close()
 
-    label_dict_path = './data/code_completion/{}/label_dict.json'.format(language)
+    label_dict_path = '{}/data/code_completion/{}/label_dict.json'.format(root, language)
     label_dict_f = open(label_dict_path, 'w')
     label_dict_f.write(json.dumps(label_dict))
     label_dict_f.close()
+
+    full_token_dict = {}
+    for key in source_vocab_dict:
+        full_token_dict[key] = len(full_token_dict)
+    with open('{}/data/code_completion/{}/full_token_dict.json'.format(root, language), 'w') as f:
+        f.write(json.dumps(full_token_dict))
 
 
 if __name__ == '__main__':

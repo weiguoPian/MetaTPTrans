@@ -154,7 +154,6 @@ def train():
     args = parser.parse_args()
     if args.seed:
         setup_seed(args.seed_idx)
-    print('Experiment on {} dataset'.format(args.dataset))
     if args.ct_vocab:
         s_vocab = CTTextVocab(args)
         t_vocab = s_vocab

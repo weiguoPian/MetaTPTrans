@@ -158,11 +158,9 @@ def train():
     parser.add_argument("--lan_embedding_dim", type=int, default=512, help="")
     parser.add_argument("--projection_dim", type=int, default=1024, help="")
 
-
     args = parser.parse_args()
     if args.seed:
         setup_seed(args.seed_idx)
-    print('Experiment on {} dataset'.format(args.dataset))
     if args.ct_vocab:
         s_vocab = CTTextVocab(args)
         # t_vocab = s_vocab
@@ -174,7 +172,8 @@ def train():
             s_vocab = TextVocab(args, 'source')
             # t_vocab = TextVocab(args, 'target')
     
-    label_dict_path = './data/code_completion/multi/label_dict.json'.format(args.dataset)
+    label_dict_path = './data/code_completion/multi/label_dict.json'
+    # label_dict_path = './data/code_completion/multi/full_token_dict.json'
     with open(label_dict_path, 'r') as label_f:
         label_dict = json.load(label_f)
 
