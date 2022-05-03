@@ -26,8 +26,6 @@ class metaTrainer:
         self.valid_infer_data = valid_infer_data
         self.test_infer_data = test_infer_data
         self.optim = Adam(self.model.parameters(), lr=self.args.lr, weight_decay=self.args.weight_decay)
-        # if self.args.lr_scheduler:
-        #     self.scheduler = ReduceLROnPlateau(self.optim, 'max', verbose=True, patience=self.args.patience, factor=0.1, min_lr=1e-5)
         if self.args.lr_scheduler:
             if self.args.MultiStepLR:
                 self.scheduler = MultiStepLR(self.optim, milestones=self.args.milestones, gamma=0.1)

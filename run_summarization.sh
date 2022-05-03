@@ -1,24 +1,20 @@
-CUDA_VISIBLE_DEVICES=0,1 nohup python -u __main_completion__.py \
-                               --load_checkpoint False \
-                               --checkpoint completion_relation_meta_2022-03-29-14-06-11_8.pth \
-                               --layers 5 \
-                               --e_ff_fold 2 \
-                               --attn_heads 8 \
-                               --hidden 1024 \
-                               --lan_embedding_dim 1024 \
-                               --projection_dim 2048 \
-                               --batch_size 64 \
-                               --accu_batch_size 128 \
-                               --val_batch_size 256 \
-                               --infer_batch_size 256 \
-                               --weight_decay 1e-5 \
-                               --lr 1e-4 \
-                               --min_lr 1e-5 \
-                               --patience 0 \
-                               --dropout 0.2 \
-                               --restart_epoch 0 \
-                               --num_classes 115 \
-                               --epochs 40 \
-                               --MultiStepLR True \
-                               --milestones 25 35 \
-                               --lr_scheduler True > nohup_completion.log 2>&1 &
+CUDA_VISIBLE_DEVICES=0,1 python -u __main_completion__.py \
+                                --layers 3 \
+                                --e_ff_fold 4 \
+                                --attn_heads 8 \
+                                --hidden 1024 \
+                                --lan_embedding_dim 1024 \
+                                --projection_dim 2048 \
+                                --batch_size 64 \
+                                --accu_batch_size 128 \
+                                --val_batch_size 256 \
+                                --infer_batch_size 256 \
+                                --weight_decay 1e-5 \
+                                --lr 1e-4 \
+                                --min_lr 1e-5 \
+                                --patience 0 \
+                                --dropout 0.2 \
+                                --epochs 20 \
+                                --MultiStepLR True \
+                                --milestones 25 35 \
+                                --lr_scheduler True

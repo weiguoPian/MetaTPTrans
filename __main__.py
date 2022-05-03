@@ -31,12 +31,8 @@ def train():
     parser.add_argument("--task", type=str, default='summarization', choices=['completion', 'summarization'])
     parser.add_argument("--MultiStepLR", type=boolean_string, default=False, help="")
     parser.add_argument("--milestones", type=int, default=[25, 30], nargs='+', help="")
-    # parser.add_argument("--beta", type=boolean_string, default=False, help="")
     parser.add_argument("--model_type", type=str, default='alpha', choices=['alpha', 'beta', 'gamma'], help="")
 
-    # dataset
-    # parser.add_argument("--dataset", type=str, help="train dataset", default='multi',
-    #                     choices=['python', 'ruby', 'javascript', 'go', 'multi'])
     parser.add_argument("--on_memory", type=boolean_string, default=True, help="Loading datasets into memory")
 
     # dataset size
@@ -155,8 +151,6 @@ def train():
     parser.add_argument("--lan_embedding_dim", type=int, default=1024, help="")
     parser.add_argument("--projection_dim", type=int, default=2048, help="")
 
-    parser.add_argument("--restart_epoch", type=int, default=0, help="")
-
     args = parser.parse_args()
     if args.seed:
         setup_seed(args.seed_idx)
@@ -212,18 +206,10 @@ def train():
     print("Training Start")
 
     for epoch in range(args.epochs):
-        if args.load_checkpoint:
-            epoch += args.restart_epoch
         if args.train:
             trainer.train(epoch)
-        # if args.test:
-        #     trainer.test(epoch)
-        # if args.dataset == 'multi':
         trainer.predict_multi(epoch, test=False)
         trainer.predict_multi(epoch, test=True)
-        # else:
-        #     trainer.predict(epoch, test=False)
-        #     trainer.predict(epoch, test=True)
     trainer.writer.close()
 
 

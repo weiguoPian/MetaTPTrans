@@ -104,8 +104,7 @@ def train():
     parser.add_argument("--layers", type=int, default=3, help="number of encoder layers")
     # parser.add_argument("--decoder_layers", type=int, default=3, help="number of decoder layers")
     parser.add_argument("--attn_heads", type=int, default=8, help="number of attention heads")
-    
-    parser.add_argument("--num_classes", type=int, default=207, help="number of classes")
+    parser.add_argument("--num_classes", type=int, default=207)
 
     # Path encoding
     parser.add_argument("--relation_path", type=boolean_string, default=True, help="Whether to use relative path")
@@ -159,9 +158,6 @@ def train():
     parser.add_argument("--lan_embedding_dim", type=int, default=512, help="")
     parser.add_argument("--projection_dim", type=int, default=1024, help="")
 
-    parser.add_argument("--restart_epoch", type=int, default=0, help="")
-    # args.projection_dim
-    # args.lan_embedding_dim
 
     args = parser.parse_args()
     if args.seed:
@@ -178,10 +174,7 @@ def train():
             s_vocab = TextVocab(args, 'source')
             # t_vocab = TextVocab(args, 'target')
     
-    # if args.dataset == 'multi':
-    #     label_dict_path = './data/code_completion/label_dict.json'
-    # else:
-    label_dict_path = './data/code_completion/label_dict.json'.format(args.dataset)
+    label_dict_path = './data/code_completion/multi/label_dict.json'.format(args.dataset)
     with open(label_dict_path, 'r') as label_f:
         label_dict = json.load(label_f)
 
@@ -229,30 +222,11 @@ def train():
     print("Training Start")
 
     for epoch in range(args.epochs):
-        if args.load_checkpoint:
-            epoch += args.restart_epoch
         if args.train:
             trainer.train(epoch)
-        # if args.test:
-        #     trainer.test(epoch)
-        # if args.dataset == 'multi':
         trainer.predict_multi(epoch, test=False)
         trainer.predict_multi(epoch, test=True)
-        # else:
-        #     trainer.predict(epoch, test=False)
-        #     trainer.predict(epoch, test=True)
     trainer.writer.close()
-
-    # for epoch in range(24):
-    #     checkpoint_path = './checkpoint/python_completion/completion_relation_python_2022-03-17-00-09-20_{}.pth'.format(epoch)
-    #     trainer.load(checkpoint_path)
-    #     trainer.predict(epoch, test=False)
-    #     trainer.predict(epoch, test=True)
-    # trainer.writer.close()
-
-    # checkpoint_path = 'checkpoint/relation_ruby_2022-02-16-15-15-41_{}.pth'.format(4)
-    # trainer.load(checkpoint_path)
-    # trainer.predict(4, test=True)
 
 
 
