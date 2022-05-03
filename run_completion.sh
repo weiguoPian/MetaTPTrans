@@ -1,0 +1,27 @@
+CUDA_VISIBLE_DEVICES=0,1 nohup python -u __main_completion__.py \
+                               --load_checkpoint False \
+                               --checkpoint completion_relation_meta_2022-03-29-14-06-11_8.pth \
+                               --layers 5 \
+                               --e_ff_fold 2 \
+                               --attn_heads 8 \
+                               --hidden 1024 \
+                               --lan_embedding_dim 512 \
+                               --projection_dim 256 \
+                               --batch_size 64 \
+                               --accu_batch_size 128 \
+                               --val_batch_size 256 \
+                               --infer_batch_size 256 \
+                               --weight_decay 1e-4 \
+                               --lr 1e-4 \
+                               --min_lr 1e-6 \
+                               --factor 0.1 \
+                               --patience 2 \
+                               --dropout 0.2 \
+                               --meta False \
+                               --restart_epoch 0 \
+                               --num_classes 115 \
+                               --dataset multi \
+                               --epochs 40 \
+                               --MultiStepLR True \
+                               --milestones 25 35 \
+                               --lr_scheduler True > nohup_completion.log 2>&1 &
