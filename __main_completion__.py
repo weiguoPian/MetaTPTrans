@@ -105,6 +105,7 @@ def train():
     # parser.add_argument("--decoder_layers", type=int, default=3, help="number of decoder layers")
     parser.add_argument("--attn_heads", type=int, default=8, help="number of attention heads")
     parser.add_argument("--num_classes", type=int, default=207)
+    # parser.add_argument("--num_classes", type=int, default=55555)
 
     # Path encoding
     parser.add_argument("--relation_path", type=boolean_string, default=True, help="Whether to use relative path")
