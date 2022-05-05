@@ -46,19 +46,17 @@ class completionTrainer:
         self.accu_steps = self.args.accu_batch_size // self.args.batch_size
         # self.criterion = nn.NLLLoss(ignore_index=0)
         # self.unk_shift = self.args.unk_shift
-        if self.args.relation_path or self.args.absolute_path:
-            print(
-                "Total Parameters: {}*1e6".format(sum([p.nelement() for _, p in self.model.named_parameters()]) // 1e6),
-                file=self.writer, flush=True)
-        else:
-            model_parameters = []
-            for name, param in self.model.named_parameters():
-                if 'path' in name:
-                    continue
-                else:
+        model_parameters = []
+        for name, param in self.model.named_parameters():
+            if 'path' in name:
+                if self.args.relation_path or self.args.absolute_path:
                     model_parameters.append(param)
-            print("Total Parameters: {}*1e6".format(sum([p.nelement() for p in model_parameters]) // 1e6),
-                  file=self.writer, flush=True)
+            if 'eye' in name:
+                continue
+            else:
+                model_parameters.append(param)
+        print("Total Parameters: {}*1e6".format(sum([p.nelement() for p in model_parameters]) / 1e6),
+                file=self.writer, flush=True)
 
     def load(self, path):
         dic = torch.load(path, map_location='cpu')
