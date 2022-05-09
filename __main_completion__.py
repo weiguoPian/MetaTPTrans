@@ -104,8 +104,8 @@ def train():
     parser.add_argument("--layers", type=int, default=3, help="number of encoder layers")
     # parser.add_argument("--decoder_layers", type=int, default=3, help="number of decoder layers")
     parser.add_argument("--attn_heads", type=int, default=8, help="number of attention heads")
-    parser.add_argument("--num_classes", type=int, default=207)
-    # parser.add_argument("--num_classes", type=int, default=55555)
+    # parser.add_argument("--num_classes", type=int, default=207)
+    parser.add_argument("--num_classes", type=int, default=55555)
 
     # Path encoding
     parser.add_argument("--relation_path", type=boolean_string, default=True, help="Whether to use relative path")
@@ -173,8 +173,8 @@ def train():
             s_vocab = TextVocab(args, 'source')
             # t_vocab = TextVocab(args, 'target')
     
-    label_dict_path = './data/code_completion/multi/label_dict.json'
-    # label_dict_path = './data/code_completion/multi/full_token_dict.json'
+    # label_dict_path = './data/code_completion/multi/label_dict.json'
+    label_dict_path = './data/code_completion/multi/full_token_dict.json'
     with open(label_dict_path, 'r') as label_f:
         label_dict = json.load(label_f)
 
