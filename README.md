@@ -1,5 +1,7 @@
 # MetaTPTrans
 
+This repository is based on the implementation of TPTrans.
+
 ## raw data
 To run experiments, please first create datasets from raw code snippets of [CodeSearchNet dataset](https://github.com/github/CodeSearchNet).
 Download and unzip the raw jsonl data of CSN into the _raw_data_ dir like that
