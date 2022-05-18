@@ -42,10 +42,7 @@ class completionTrainer:
         print(self.args, file=self.writer, flush=True)
         self.iter = -1
         self.best_epoch, self.best_top1 = 0, float('-inf')
-        # self.best_epoch, self.best_f1 = 0, float('-inf')
         self.accu_steps = self.args.accu_batch_size // self.args.batch_size
-        # self.criterion = nn.NLLLoss(ignore_index=0)
-        # self.unk_shift = self.args.unk_shift
         model_parameters = []
         for name, param in self.model.named_parameters():
             if 'path' in name:

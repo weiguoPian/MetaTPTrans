@@ -61,7 +61,6 @@ class metaTrainer:
         dic = torch.load(path, map_location='cpu')
         load_pre = ''
         model_pre = ''
-        # print(dic.keys())
         for key, _ in dic.items():
             if 'module.' in key:
                 load_pre = 'module.'
@@ -90,7 +89,6 @@ class metaTrainer:
             if key in ori_dic and ori_dic[key].shape == value.shape:
                 temp_dict[key] = value
         dic = temp_dict
-        # print(dic.keys())
         for key, value in self.model.state_dict().items():
             if key not in dic:
                 dic[key] = value
