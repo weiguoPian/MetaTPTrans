@@ -1,0 +1,5 @@
+data/
+raw_data/
+run/
+checkpoint/
+*.log

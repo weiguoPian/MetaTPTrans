@@ -1,4 +1,4 @@
-python -u __main_completion__.py \
+CUDA_VISIBLE_DEVICES=2,3 nohup python -u __main__.py \
         --model_type alpha \
         --layers 3 \
         --e_ff_fold 4 \
@@ -16,6 +16,4 @@ python -u __main_completion__.py \
         --patience 0 \
         --dropout 0.2 \
         --epochs 20 \
-        --MultiStepLR False \
-        --milestones 8 \
-        --lr_scheduler True
+        --lr_scheduler True > nohup.log 2>&1 &

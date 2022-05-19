@@ -1,6 +1,6 @@
 from torch import embedding, nn
 from .embedding import LeftEmbedding, RightEmbedding, PathEmbedding
-from .encoder import Encoder, MetaEncoder
+from .encoder import MetaEncoder
 import torch
 import math
 import torch.nn.functional as F
