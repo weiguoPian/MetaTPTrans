@@ -3,3 +3,4 @@ raw_data/
 run/
 checkpoint/
 *.log
+*/__pycache__
