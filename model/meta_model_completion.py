@@ -7,7 +7,7 @@ import torch.nn.functional as F
 from .encoder.utils.gelu import GELU
 
 class metaModelCompletion(nn.Module):
-    def __init__(self, args, s_vocab):
+    def __init__(self, args, s_vocab, num_classes):
         super().__init__()
         self.args = args
         self.left_embedding = LeftEmbedding(args, s_vocab)
@@ -18,7 +18,7 @@ class metaModelCompletion(nn.Module):
         self.relation_path = args.relation_path
         self.absolute_path = args.absolute_path
 
-        self.output_layer = nn.Linear(args.hidden, args.num_classes)
+        self.output_layer = nn.Linear(args.hidden, num_classes)
 
         self.embedding_para = torch.Tensor(4, self.args.lan_embedding_dim)
         nn.init.xavier_normal_(self.embedding_para)

@@ -69,7 +69,7 @@ def train():
     parser.add_argument("--epochs", type=int, default=30, help="number of epochs")
     parser.add_argument("--num_workers", type=int, default=28, help="dataloader worker size")
     parser.add_argument("--save", type=boolean_string, default=True, help="whether to save model checkpoint")
-    parser.add_argument("--weight_decay", type=float, default=1e-4, help="")
+    parser.add_argument("--weight_decay", type=float, default=1e-5, help="")
     parser.add_argument("--label_smoothing", type=float, default=0.1, help="")
     parser.add_argument("--dropout", type=float, default=0.2, help="")
     parser.add_argument("--shuffle", type=boolean_string, default=True, help="whether to shuffle the training data")
@@ -204,14 +204,12 @@ def train():
         trainer.load(checkpoint_path)
     print("Training Start")
 
-    trainer.predict_multi(0, test=True)
-
-    # for epoch in range(args.epochs):
-    #     if args.train:
-    #         trainer.train(epoch)
-    #     trainer.predict_multi(epoch, test=False)
-    #     trainer.predict_multi(epoch, test=True)
-    # trainer.writer.close()
+    for epoch in range(args.epochs):
+        if args.train:
+            trainer.train(epoch)
+        trainer.predict_multi(epoch, test=False)
+        trainer.predict_multi(epoch, test=True)
+    trainer.writer.close()
 
 
 

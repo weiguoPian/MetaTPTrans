@@ -1,6 +1,6 @@
 import subprocess
 
-cmd = 'ps aux|grep __main__'
+cmd = 'ps aux|grep __main_'
 
 (status, output) =subprocess.getstatusoutput(cmd)
 output = output.split('\n')

@@ -26,7 +26,7 @@ class CompletionPathAttenDataset(Dataset):
 
     def __init__(self, args, s_vocab, label_dict, type_):
         self.on_memory = args.on_memory
-        self.dataset_dir = os.path.join('./data/code_completion', args.dataset)
+        self.dataset_dir = './data/code_completion/multi'
         self.s_vocab = s_vocab
         self.label_dict = label_dict
         self.args = args
@@ -47,7 +47,6 @@ class CompletionPathAttenDataset(Dataset):
         if self.args.tiny_data > 0:
             self.corpus_line = self.args.tiny_data
         self.hop = self.args.hop
-        # self.rp_sample = self.args.rp_sample
         self.language2idx = {'python': 0, 'ruby': 1, 'javascript': 2, 'go': 3}
 
 
@@ -64,14 +63,6 @@ class CompletionPathAttenDataset(Dataset):
         return res
 
     def process(self, data):
-
-        # if self.args.pointer:
-        #     assert self.args.uni_vocab, 'separate vocab not support'
-        #     e_voc, e_voc_, voc_len = make_extended_vocabulary(data['content'], self.s_vocab)
-        # else:
-        #     e_voc, e_voc_, voc_len = None, None, None
-        # f_source, f_target = decoder_process(data['target'], self.t_vocab, self.args.max_target_len,
-        #                                      e_voc, self.args.pointer)
         label = self.label_dict[data['label']]
         row_ = row_process(data['row'], self.args.max_code_length)
         content_, content_mask_, named_, content_e = content_process(data['content'], data['named'], self.s_vocab,
@@ -86,19 +77,14 @@ class CompletionPathAttenDataset(Dataset):
         data_dic = {'label': label, 'content': content_, 'content_mask': content_mask_,
                     'path_map': paths_map_, 'paths': paths_, 'paths_mask': paths_mask_, 'named': named_, 'row': row_,
                     'r_paths': r_paths_, 'r_path_idx': r_path_idx_, 'r_paths_mask': r_paths_mask_}
-        # if self.args.pointer:
-        #     data_dic['e_voc'] = e_voc
-        #     data_dic['e_voc_'] = e_voc_
-        #     data_dic['voc_len'] = voc_len
-        #     data_dic['content_e'] = content_e
-        if self.args.dataset == 'multi':
-            data_dic['language'] = self.language2idx[data['language']]
+
+        data_dic['language'] = self.language2idx[data['language']]
         return data_dic
 
     def get_corpus_line(self, item):
         if self.on_memory:
             data = self.data[item]
-            return convert_line_completion(data, self.args.dataset)
+            return convert_line_completion(data)
         else:
             if item == 0:
                 self.file.close()
@@ -108,7 +94,7 @@ class CompletionPathAttenDataset(Dataset):
                 self.file.close()
                 self.file = open(self.json_path, 'r')
                 line = self.file.__next__()
-            data = convert_line_completion(line, self.args.dataset)
+            data = convert_line_completion(line)
             return data
 
 
@@ -118,10 +104,6 @@ def completion_collect_fn(batch):
     for sample in batch:
         c_l = torch.count_nonzero(sample['content_mask']).item()
         if c_l > max_content_len: max_content_len = c_l
-        # f_l = torch.count_nonzero(sample['f_source']).item()
-        # if f_l > max_target_len: max_target_len = f_l
-    # data['f_source'] = torch.stack([b['f_source'] for b in batch], dim=0)[:, :max_target_len]
-    # data['f_target'] = torch.stack([b['f_target'] for b in batch], dim=0)[:, :max_target_len]
     data['label'] = torch.stack([b['label'] for b in batch])
     data['content'] = torch.stack([b['content'] for b in batch], dim=0)[:, :max_content_len]
     data['content_mask'] = torch.stack([b['content_mask'] for b in batch], dim=0)[:, :max_content_len]
@@ -133,13 +115,6 @@ def completion_collect_fn(batch):
     data['r_paths'] = torch.stack([b['r_paths'] for b in batch], dim=0)
     data['r_path_idx'] = torch.stack([b['r_path_idx'] for b in batch], dim=0)[:, :max_content_len]
     data['r_paths_mask'] = torch.stack([b['r_paths_mask'] for b in batch], dim=0)
-    # if 'e_voc' in batch[0]:
-    #     data['e_voc'] = [b['e_voc'] for b in batch]
-    #     data['e_voc_'] = [b['e_voc_'] for b in batch]
-    #     max_voc_len = torch.max(torch.stack([b['voc_len'] for b in batch], dim=0)).item()
-    #     data['voc_len'] = torch.tensor(
-    #         [max_voc_len for _ in batch])  # we set e voc len equal for all data in batch, for data parallel
-    #     data['content_e'] = torch.stack([b['content_e'] for b in batch], dim=0)[:, :max_content_len]
     if 'language' in batch[0]:
         data['language'] = torch.stack([b['language'] for b in batch])
 

@@ -13,7 +13,7 @@ from .statistic import calculate, old_calculate
 import numpy as np
 
 class completionTrainer:
-    def __init__(self, args, model, train_data, valid_data, valid_infer_data, test_infer_data):
+    def __init__(self, args, model, train_data, valid_data, valid_infer_data, test_infer_data, num_classes):
         self.args = args
         cuda_condition = torch.cuda.is_available() and self.args.with_cuda
         self.device = torch.device("cuda:0" if cuda_condition else "cpu")
@@ -27,6 +27,7 @@ class completionTrainer:
         self.valid_data = valid_data
         self.valid_infer_data = valid_infer_data
         self.test_infer_data = test_infer_data
+        self.num_classes = num_classes
         self.optim = Adam(self.model.parameters(), lr=self.args.lr, weight_decay=self.args.weight_decay)
         if self.args.lr_scheduler:
             if self.args.MultiStepLR:
@@ -102,7 +103,7 @@ class completionTrainer:
         self.iteration(epoch, self.valid_data, train=False)
 
     def loss_func(self, logits, label):
-        targets = F.one_hot(label, num_classes=self.args.num_classes)
+        targets = F.one_hot(label, num_classes=self.num_classes)
 
         loss = -torch.mean(torch.sum(F.log_softmax(logits, dim=-1) * targets, dim=1))
 

@@ -1,6 +1,6 @@
 CUDA_VISIBLE_DEVICES=2,3 nohup python -u __main_summarization__.py \
         --load_checkpoint True \
-        --checkpoint meta_SOTA_gamma.pth \
+        --checkpoint summarization/meta_SOTA_gamma.pth \
         --model_type gamma \
         --layers 3 \
         --e_ff_fold 4 \
@@ -12,7 +12,6 @@ CUDA_VISIBLE_DEVICES=2,3 nohup python -u __main_summarization__.py \
         --accu_batch_size 128 \
         --val_batch_size 256 \
         --infer_batch_size 256 \
-        --weight_decay 1e-5 \
         --lr 1e-4 \
         --min_lr 1e-5 \
         --patience 0 \

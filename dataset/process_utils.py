@@ -9,10 +9,7 @@ def convert_line(line):
     :return: 
     '''
     data = dict()
-    # if type == 'multi':
     target, content, named, paths, paths_map, row, r_path_idx, r_paths, language = line.strip().split('\t')
-    # else:
-    #     target, content, named, paths, paths_map, row, r_path_idx, r_paths = line.strip().split('\t')
     data['target'] = target.split('|')
     data['content'] = content.split('|')
     data['named'] = [int(num) for num in named.split('|')]
@@ -21,7 +18,6 @@ def convert_line(line):
     data['r_path_idx'] = [int(num) for num in r_path_idx.split('|')]
     data['r_paths'] = [[int(num) for num in r_path.split()] for r_path in r_paths.split('|')]
     data['row'] = [int(num) for num in row.split('|')]
-    # if type == 'multi':
     data['language'] = language
     return data
 
@@ -32,10 +28,7 @@ def convert_line_completion(line):
     :return: 
     '''
     data = dict()
-    # if type == 'multi':
     label, content, named, paths, paths_map, row, r_path_idx, r_paths, language = line.strip().split('\t')
-    # else:
-    #     label, content, named, paths, paths_map, row, r_path_idx, r_paths = line.strip().split('\t')
     data['label'] = label
     data['content'] = content.split('|')
     data['named'] = [int(num) for num in named.split('|')]
@@ -44,7 +37,6 @@ def convert_line_completion(line):
     data['r_path_idx'] = [int(num) for num in r_path_idx.split('|')]
     data['r_paths'] = [[int(num) for num in r_path.split()] for r_path in r_paths.split('|')]
     data['row'] = [int(num) for num in row.split('|')]
-    # if type == 'multi':
     data['language'] = language
     return data
 

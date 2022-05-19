@@ -4,9 +4,9 @@ import json
 from statistics import mode
 
 from torch.utils.data import DataLoader
-from dataset import CompletionPathAttenDataset, TextVocab, UniTextVocab, completion_collect_fn, CTTextVocab, CTCompletionPathAttenDataset, CT_completion_collect_fn
-from trainer import Trainer, metaTrainer, completionTrainer
-from model import Model, metaModel, ModelCompletion, metaModelCompletion, CTModelCompletion
+from dataset import CompletionPathAttenDataset, TextVocab, UniTextVocab, completion_collect_fn, CTTextVocab
+from trainer import completionTrainer
+from model import metaModelCompletion
 import torch
 import numpy as np
 import random
@@ -32,12 +32,9 @@ def train():
     parser.add_argument("--task", type=str, default='completion', choices=['completion', 'summarization'])
     parser.add_argument("--MultiStepLR", type=boolean_string, default=False, help="")
     parser.add_argument("--milestones", type=int, default=[25, 30], nargs='+', help="")
-    # parser.add_argument("--beta", type=boolean_string, default=False, help="")
     parser.add_argument("--model_type", type=str, default='alpha', choices=['alpha', 'beta', 'gamma'], help="")
 
     # dataset
-    # parser.add_argument("--dataset", type=str, help="train dataset", default='multi',
-    #                     choices=['python', 'ruby', 'javascript', 'go', 'multi'])
     parser.add_argument("--on_memory", type=boolean_string, default=True, help="Loading datasets into memory")
 
     # dataset size
@@ -64,7 +61,6 @@ def train():
     parser.add_argument("--lr_scheduler", type=boolean_string, default=True,
                         help="We use the ReduceLROnPlateau scheduler")
     parser.add_argument("--min_lr", type=float, default=1e-5, help="minimal learning rate of adam")
-    # parser.add_argument("--factor", type=float, default=0.1, help="lr decay factor")
     parser.add_argument("--patience", type=int, default=2, help="patience")
     parser.add_argument("--clip", type=float, default=0, help="0 is no clip")
     parser.add_argument("--batch_size", type=int, default=256, help="number of batch_size")
@@ -75,7 +71,7 @@ def train():
     parser.add_argument("--epochs", type=int, default=40, help="number of epochs")
     parser.add_argument("--num_workers", type=int, default=32, help="dataloader worker size")
     parser.add_argument("--save", type=boolean_string, default=True, help="whether to save model checkpoint")
-    parser.add_argument("--weight_decay", type=float, default=1e-3, help="")
+    parser.add_argument("--weight_decay", type=float, default=1e-4, help="")
     parser.add_argument("--dropout", type=float, default=0.2, help="")
     parser.add_argument("--shuffle", type=boolean_string, default=True, help="whether to shuffle the training data")
 
@@ -99,13 +95,9 @@ def train():
     parser.add_argument("--embedding_size", type=int, default=512, help="hidden size of transformer model")
     parser.add_argument("--activation", type=str, default='gelu', help="", choices=['gelu', 'relu'])
     parser.add_argument("--hidden", type=int, default=1024, help="hidden size of transformer model")
-    # parser.add_argument("--d_ff_fold", type=int, default=4, help="ff_hidden = ff_fold * hidden; for decoder")
     parser.add_argument("--e_ff_fold", type=int, default=4, help="ff_hidden = ff_fold * hidden; for encoder")
     parser.add_argument("--layers", type=int, default=3, help="number of encoder layers")
-    # parser.add_argument("--decoder_layers", type=int, default=3, help="number of decoder layers")
     parser.add_argument("--attn_heads", type=int, default=8, help="number of attention heads")
-    # parser.add_argument("--num_classes", type=int, default=207)
-    parser.add_argument("--num_classes", type=int, default=55555)
 
     # Path encoding
     parser.add_argument("--relation_path", type=boolean_string, default=True, help="Whether to use relative path")
@@ -155,7 +147,6 @@ def train():
                         help="load checkpoint for continue train or infer")
     parser.add_argument("--checkpoint", type=str, default='completion_relation_python_2022-03-16-14-00-58_0.pth', help="the checkpoint file path")
 
-    parser.add_argument("--meta", type=boolean_string, default=True, help="")
     parser.add_argument("--lan_embedding_dim", type=int, default=512, help="")
     parser.add_argument("--projection_dim", type=int, default=1024, help="")
 
@@ -177,6 +168,7 @@ def train():
     label_dict_path = './data/code_completion/multi/full_token_dict.json'
     with open(label_dict_path, 'r') as label_f:
         label_dict = json.load(label_f)
+    num_classes = len(label_dict)
 
     print("Loading Train Dataset")
     if args.data_debug:
@@ -207,14 +199,12 @@ def train():
     test_infer_data_loader = DataLoader(test_dataset, batch_size=args.infer_batch_size, num_workers=num_workers,
                                         collate_fn=completion_collect_fn)
     print("Building Model")
-    if args.meta:
-        model = metaModelCompletion(args, s_vocab)
-    else:
-        model = ModelCompletion(args, s_vocab)
+
+    model = metaModelCompletion(args, s_vocab, num_classes=num_classes)
 
     print("Creating Trainer")
     trainer = completionTrainer(args=args, model=model, train_data=train_data_loader, valid_data=valid_data_loader,
-                                valid_infer_data=valid_infer_data_loader, test_infer_data=test_infer_data_loader)
+                                valid_infer_data=valid_infer_data_loader, test_infer_data=test_infer_data_loader, num_classes=num_classes)
     
     if args.load_checkpoint:
         checkpoint_path = 'checkpoint/{}'.format(args.checkpoint)

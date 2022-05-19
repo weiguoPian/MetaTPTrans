@@ -27,7 +27,6 @@ class PathAttenDataset(Dataset):
     def __init__(self, args, s_vocab, t_vocab, type_):
         self.on_memory = args.on_memory
         self.dataset_dir = './data/summarization/multi'
-        # os.path.join('./data', args.dataset)
         self.s_vocab = s_vocab
         self.t_vocab = t_vocab
         self.args = args
@@ -92,7 +91,6 @@ class PathAttenDataset(Dataset):
             data_dic['e_voc_'] = e_voc_
             data_dic['voc_len'] = voc_len
             data_dic['content_e'] = content_e
-            # if self.args.dataset == 'multi':
             data_dic['language'] = self.language2idx[data['language']]
         return data_dic
 
@@ -100,7 +98,6 @@ class PathAttenDataset(Dataset):
         if self.on_memory:
             data = self.data[item]
             return convert_line(data)
-            # return convert_line(data, self.args.dataset)
         else:
             if item == 0:
                 self.file.close()
@@ -111,7 +108,6 @@ class PathAttenDataset(Dataset):
                 self.file = open(self.json_path, 'r')
                 line = self.file.__next__()
             data = convert_line(line)
-            # data = convert_line(line, self.args.dataset)
             return data
 
 
