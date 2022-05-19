@@ -323,7 +323,7 @@ def refine_source_vocab_gen_label_dict(language):
             sub_label_vocab_dict = json.load(sub_label_vocab)
             sub_label_vocab.close()
             for key in sub_label_vocab_dict:
-                if key not in sub_label_vocab_dict:
+                if key not in label_vocab_dict:
                     label_vocab_dict[key] = sub_label_vocab_dict[key]
                 else:
                     label_vocab_dict[key] += sub_label_vocab_dict[key]

@@ -3,7 +3,6 @@ import subprocess
 cmd = 'ps aux|grep __main__'
 
 (status, output) =subprocess.getstatusoutput(cmd)
-# print(status)
 output = output.split('\n')
 
 for line in output:

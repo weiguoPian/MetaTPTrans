@@ -204,12 +204,14 @@ def train():
         trainer.load(checkpoint_path)
     print("Training Start")
 
-    for epoch in range(args.epochs):
-        if args.train:
-            trainer.train(epoch)
-        trainer.predict_multi(epoch, test=False)
-        trainer.predict_multi(epoch, test=True)
-    trainer.writer.close()
+    trainer.predict_multi(0, test=True)
+
+    # for epoch in range(args.epochs):
+    #     if args.train:
+    #         trainer.train(epoch)
+    #     trainer.predict_multi(epoch, test=False)
+    #     trainer.predict_multi(epoch, test=True)
+    # trainer.writer.close()
 
 
 

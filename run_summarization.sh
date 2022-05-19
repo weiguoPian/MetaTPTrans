@@ -1,12 +1,14 @@
 CUDA_VISIBLE_DEVICES=2,3 nohup python -u __main__.py \
-        --model_type alpha \
+        --load_checkpoint True \
+        --checkpoint meta_SOTA_beta.pth \
+        --model_type beta \
         --layers 3 \
         --e_ff_fold 4 \
         --attn_heads 8 \
         --hidden 1024 \
         --lan_embedding_dim 1024 \
         --projection_dim 2048 \
-        --batch_size 64 \
+        --batch_size 32 \
         --accu_batch_size 128 \
         --val_batch_size 256 \
         --infer_batch_size 256 \
