@@ -1,7 +1,7 @@
-CUDA_VISIBLE_DEVICES=2,3 nohup python -u __main__.py \
+CUDA_VISIBLE_DEVICES=2,3 nohup python -u __main_summarization__.py \
         --load_checkpoint True \
-        --checkpoint meta_SOTA_beta.pth \
-        --model_type beta \
+        --checkpoint meta_SOTA_gamma.pth \
+        --model_type gamma \
         --layers 3 \
         --e_ff_fold 4 \
         --attn_heads 8 \
