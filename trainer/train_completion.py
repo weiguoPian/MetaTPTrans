@@ -35,8 +35,7 @@ class completionTrainer:
             else:
                 self.scheduler = ReduceLROnPlateau(self.optim, 'max', verbose=True, patience=args.patience, factor=0.1, min_lr=args.min_lr)
         self.clip = self.args.clip
-        self.writer_path = '{}_{}_{}_{}'.format('completion', 'relation' if args.relation_path else 'Naive', 'meta' if args.meta else args.dataset,
-                                             datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S'))
+        self.writer_path = '{}_{}_meta_{}'.format('completion', 'relation' if args.relation_path else 'Naive', datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S'))
         print(self.writer_path)
         self.tensorboard_writer = SummaryWriter(os.path.join('run', self.writer_path))
         self.writer = open(os.path.join('run', self.writer_path, 'experiment.txt'), 'w')

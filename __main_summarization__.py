@@ -135,7 +135,7 @@ def train():
     parser.add_argument("--unk_shift", type=boolean_string, default=True,
                         help="reduce the prob of unk to avoid inferring unk token")
     parser.add_argument("--seed", type=boolean_string, default=True, help="fix seed or not")
-    parser.add_argument("--seed_idx", type=int, default=20, help="choose different seed idx for error bars")
+    parser.add_argument("--seed_idx", type=int, default=20)
     parser.add_argument("--old_calculate", type=boolean_string, default=True,
                         help="see the statistic.py in trainer dir for details")
 
