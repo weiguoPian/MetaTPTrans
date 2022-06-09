@@ -30,7 +30,7 @@ def train():
 
     parser.add_argument("--task", type=str, default='summarization', choices=['completion', 'summarization'])
     parser.add_argument("--MultiStepLR", type=boolean_string, default=False, help="")
-    parser.add_argument("--milestones", type=int, default=[25, 30], nargs='+', help="")
+    parser.add_argument("--milestones", type=int, default=[6], nargs='+', help="")
     parser.add_argument("--model_type", type=str, default='alpha', choices=['alpha', 'beta', 'gamma'], help="")
 
     parser.add_argument("--on_memory", type=boolean_string, default=True, help="Loading datasets into memory")
@@ -66,8 +66,8 @@ def train():
                         help="number of real batch_size per step, save gpu memory")
     parser.add_argument("--val_batch_size", type=int, default=128, help="number of batch_size of valid")
     parser.add_argument("--infer_batch_size", type=int, default=128, help="number of batch_size of infer")
-    parser.add_argument("--epochs", type=int, default=30, help="number of epochs")
-    parser.add_argument("--num_workers", type=int, default=28, help="dataloader worker size")
+    parser.add_argument("--epochs", type=int, default=10, help="number of epochs")
+    parser.add_argument("--num_workers", type=int, default=32, help="dataloader worker size")
     parser.add_argument("--save", type=boolean_string, default=True, help="whether to save model checkpoint")
     parser.add_argument("--weight_decay", type=float, default=1e-5, help="")
     parser.add_argument("--label_smoothing", type=float, default=0.1, help="")

@@ -12,16 +12,12 @@ class CompletionPathAttenDataset(Dataset):
     The 'path' is the relative path, the 'paths_mask' is mask for padded relative path
     The 'r_path' means the path to 'r'oot, so it is the absolute path, and the 'r_paths_mask' is mask for padded absolute path
 
-    The 'f_source' is the function name as decoder input, and the 'f_target' is the decoder's gold target
-
     The 'content' is the code tokens, the 'content_mask' is mask for token padding
 
     The 'path_map' is the matrix M for mapping, see appendix about the efficient computation of relative path encoding for details
     The 'r_path_idx' is used for reduce cost of absolute path, also see appendix about absolute path encoding
 
     The 'named' and 'row' are some additional structure information, but they are not much useful, so you can also ignore them
-
-    The 'e_voc', 'e_voc_', 'voc_len' and 'content_e' are used for pointer network
     '''
 
     def __init__(self, args, s_vocab, label_dict, type_):
@@ -100,10 +96,30 @@ class CompletionPathAttenDataset(Dataset):
 
 def completion_collect_fn(batch):
     data = dict()
-    max_content_len, max_target_len = 0, 0
+    max_content_len = 0
     for sample in batch:
         c_l = torch.count_nonzero(sample['content_mask']).item()
         if c_l > max_content_len: max_content_len = c_l
+    data['label'] = torch.stack([b['label'] for b in batch])
+    data['content'] = torch.stack([b['content'] for b in batch], dim=0)[:, :max_content_len]
+    data['content_mask'] = torch.stack([b['content_mask'] for b in batch], dim=0)[:, :max_content_len]
+    data['path_map'] = torch.stack([b['path_map'] for b in batch], dim=0)[:, :max_content_len, :max_content_len]
+    data['paths'] = torch.stack([b['paths'] for b in batch], dim=0)
+    data['paths_mask'] = torch.stack([b['paths_mask'] for b in batch], dim=0)
+    data['named'] = torch.stack([b['named'] for b in batch], dim=0)[:, :max_content_len]
+    data['row'] = torch.stack([b['row'] for b in batch], dim=0)[:, :max_content_len]
+    data['r_paths'] = torch.stack([b['r_paths'] for b in batch], dim=0)
+    data['r_path_idx'] = torch.stack([b['r_path_idx'] for b in batch], dim=0)[:, :max_content_len]
+    data['r_paths_mask'] = torch.stack([b['r_paths_mask'] for b in batch], dim=0)
+    if 'language' in batch[0]:
+        data['language'] = torch.stack([b['language'] for b in batch])
+
+    return data
+
+
+def completion_collect_fn_inference(batch):
+    data = dict()
+    max_content_len = 512
     data['label'] = torch.stack([b['label'] for b in batch])
     data['content'] = torch.stack([b['content'] for b in batch], dim=0)[:, :max_content_len]
     data['content_mask'] = torch.stack([b['content_mask'] for b in batch], dim=0)[:, :max_content_len]

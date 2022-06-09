@@ -8,5 +8,5 @@ output = output.split('\n')
 for line in output:
     subprocess_num = line.split(' ')[3]
     print(subprocess_num)
-    # cmd_kill = 'kill -9 {}'.format(subprocess_num)
-    # subprocess.call(cmd_kill, shell=True)
+    cmd_kill = 'kill -9 {}'.format(subprocess_num)
+    subprocess.call(cmd_kill, shell=True)

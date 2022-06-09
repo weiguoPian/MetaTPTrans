@@ -4,7 +4,7 @@ import json
 from statistics import mode
 
 from torch.utils.data import DataLoader
-from dataset import CompletionPathAttenDataset, TextVocab, UniTextVocab, completion_collect_fn, CTTextVocab
+from dataset import CompletionPathAttenDataset, TextVocab, UniTextVocab, completion_collect_fn, completion_collect_fn_inference, CTTextVocab
 from trainer import completionTrainer
 from model import metaModelCompletion
 import torch
@@ -155,14 +155,11 @@ def train():
         setup_seed(args.seed_idx)
     if args.ct_vocab:
         s_vocab = CTTextVocab(args)
-        # t_vocab = s_vocab
     else:
         if args.uni_vocab:
             s_vocab = UniTextVocab(args)
-            # t_vocab = s_vocab
         else:
             s_vocab = TextVocab(args, 'source')
-            # t_vocab = TextVocab(args, 'target')
     
     # label_dict_path = './data/code_completion/multi/label_dict.json'
     label_dict_path = './data/code_completion/multi/full_token_dict.json'

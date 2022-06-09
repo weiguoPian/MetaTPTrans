@@ -32,8 +32,8 @@ class metaTrainer:
             else:
                 self.scheduler = ReduceLROnPlateau(self.optim, 'max', verbose=True, patience=self.args.patience, factor=0.1, min_lr=args.min_lr)
         self.clip = self.args.clip
-        self.writer_path = '{}_{}_{}'.format('relation' if args.relation_path else 'Naive', 'meta',
-                                             datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S'))
+        self.writer_path = '{}_{}_{}_{}'.format('relation' if args.relation_path else 'Naive', 'meta', args.model_type,
+                                                datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S'))
         print(self.writer_path)
         self.tensorboard_writer = SummaryWriter(os.path.join('run', self.writer_path))
         self.writer = open(os.path.join('run', self.writer_path, 'experiment.txt'), 'w')
@@ -318,8 +318,6 @@ class metaTrainer:
         print(
             "{} go:         precision={:.6f}, recall={:.6f}, f1={:.6f}".format(str_code, go_precision, go_recall, go_f1), file=self.writer,
             flush=True)
-        # if not test and self.args.lr_scheduler:
-        #     self.scheduler.step(f1)
         if not test and self.args.lr_scheduler:
             if self.args.MultiStepLR:
                 self.scheduler.step()

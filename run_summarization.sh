@@ -1,7 +1,5 @@
-CUDA_VISIBLE_DEVICES=2,3 nohup python -u __main_summarization__.py \
-        --load_checkpoint True \
-        --checkpoint summarization/meta_SOTA_gamma.pth \
-        --model_type gamma \
+CUDA_VISIBLE_DEVICES=0,1 nohup python -u __main_summarization__.py \
+        --model_type beta \
         --layers 3 \
         --e_ff_fold 4 \
         --attn_heads 8 \
@@ -13,8 +11,4 @@ CUDA_VISIBLE_DEVICES=2,3 nohup python -u __main_summarization__.py \
         --val_batch_size 256 \
         --infer_batch_size 256 \
         --lr 1e-4 \
-        --min_lr 1e-5 \
-        --patience 0 \
-        --dropout 0.2 \
-        --epochs 20 \
-        --lr_scheduler True > nohup.log 2>&1 &
+        --min_lr 1e-5 > nohup.log 2>&1 &
