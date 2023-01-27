@@ -6,7 +6,7 @@ CUDA_VISIBLE_DEVICES=0,1 nohup python -u __main_completion__.py \
         --hidden 1024 \
         --lan_embedding_dim 512 \
         --projection_dim 512 \
-        --batch_size 64 \
+        --batch_size 32 \
         --accu_batch_size 128 \
         --val_batch_size 256 \
         --infer_batch_size 256 \
