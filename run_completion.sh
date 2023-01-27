@@ -14,4 +14,4 @@ CUDA_VISIBLE_DEVICES=0,1 nohup python -u __main_completion__.py \
         --min_lr 1e-6 \
         --MultiStepLR True \
         --milestones 30 35 \
-        --lr_scheduler True > nohup.log 2>&1 &
+        --lr_scheduler True > nohup_completion.log 2>&1 &
