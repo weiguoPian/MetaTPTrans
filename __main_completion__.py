@@ -190,11 +190,11 @@ def train():
         train_data_loader = None
     
     valid_data_loader = DataLoader(valid_dataset, batch_size=args.val_batch_size, num_workers=num_workers,
-                                collate_fn=completion_collect_fn)
+                                   collate_fn=completion_collect_fn_inference)
     valid_infer_data_loader = DataLoader(valid_dataset, batch_size=args.infer_batch_size, num_workers=num_workers,
-                                        collate_fn=completion_collect_fn)
+                                         collate_fn=completion_collect_fn_inference)
     test_infer_data_loader = DataLoader(test_dataset, batch_size=args.infer_batch_size, num_workers=num_workers,
-                                        collate_fn=completion_collect_fn)
+                                        collate_fn=completion_collect_fn_inference)
     print("Building Model")
 
     model = metaModelCompletion(args, s_vocab, num_classes=num_classes)
